@@ -6,10 +6,6 @@ var gameEndTimerSprite = Class.create(Sprite, {
     
 });
 
-var gameEndTimerLabel = Class.create(Label,{
-    
-});
-
 var mouseCursoleLine = Class.create(Sprite, {
     initialize: function(width, height){
         var surface = new Surface(width, height);
@@ -23,10 +19,6 @@ var mouseCursoleLine = Class.create(Sprite, {
         context.stroke();
         this.image = surface;
     }
-});
-    
-var mouseCursoleYLine = Class.create(Sprite, {
-    
 });
 
 var mouseCursoleElipse = Class.create(Sprite, {
@@ -71,6 +63,13 @@ function score(game) {
 function game(game) {
     var scene = new Scene();
     var score = 0;
+    
+    var timeLeftSecond = 30;
+    var timeLeftLabel = new Label();
+    timeLeftLabel.text = timeLeftSecond;
+    timeLeftLabel.x = gameScreenSize[0] / 2;
+    timeLeftLabel.y = gameScreenSize[0] /2 - 30;
+    
     var isStart = false;
     var scoreLabel = new Label();
     scoreLabel.text = score;
@@ -83,6 +82,10 @@ function game(game) {
     var YLine = new mouseCursoleLine(1, gameScreenSize[1]);
     
     var click = function(clickPoint){
+        if(!isStart){
+            game.frame = 0;
+            isStart = true;
+        }
         var x_pos = Math.floor(Math.random() * gameScreenSize[0] - 30);
         var y_pos = Math.floor(Math.random() * gameScreenSize[1] - 30);
         target.tl.moveTo(x_pos, y_pos, 10, enchant.Easing.QUAD_EASEINOUT);
@@ -113,9 +116,19 @@ function game(game) {
         YLine.x = x_pos;
     });
     
+    scene.on('enterframe', function(){
+       if(isStart){
+            if(game.frame % game.fps == 0){
+                timeLeftSecond -= 1;
+                timeLeftLabel.text = timeLeftSecond;
+            }
+        }
+    });
+    
     scoreLabel.x = 5;
     scoreLabel.y = 5;
     
+    scene.addChild(timeLeftLabel);
     scene.addChild(XLine);
     scene.addChild(YLine);
     scene.addChild(mouseElipse);
