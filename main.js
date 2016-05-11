@@ -10,8 +10,19 @@ var gameEndTimerLabel = Class.create(Label,{
     
 });
 
-var mouseCursoleXLine = Class.create(Sprite, {
-    
+var mouseCursoleLine = Class.create(Sprite, {
+    initialize: function(width, height){
+        var surface = new Surface(width, height);
+        Sprite.call(this, width, height);
+        
+        var context = surface.context;
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(width, height);
+        context.closePath();
+        context.stroke();
+        this.image = surface;
+    }
 });
     
 var mouseCursoleYLine = Class.create(Sprite, {
@@ -67,6 +78,8 @@ function game(game) {
     var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, "#FB0006");
     
     var mouseElipse = new mouseCursoleElipse();
+    var XLine = new mouseCursoleLine(gameScreenSize[0], 1);
+    var YLine = new mouseCursoleLine(1, gameScreenSize[1]);
     
     var click = function(clickPoint){
         var x_pos = Math.floor(Math.random() * gameScreenSize[0] - 30);
@@ -86,15 +99,19 @@ function game(game) {
     });
     
     document.addEventListener("mousemove", function(e){
-        var x_pos = e.clientX;
-        var y_pos = e.clientY;
+        var x_pos = e.pageX / game.scale;
+        var y_pos = e.pageY / game.scale;
         mouseElipse.x = x_pos - mouseElipse.width / 2;
         mouseElipse.y = y_pos - mouseElipse.height / 2;
+        
+        XLine.y = y_pos;
+        YLine.x = x_pos;
     });
-    
     scoreLabel.x = 5;
     scoreLabel.y = 5;
     
+    scene.addChild(XLine);
+    scene.addChild(YLine);
     scene.addChild(mouseElipse);
     scene.addChild(target);
     scene.addChild(extra);
