@@ -1,6 +1,20 @@
 'use strict';
 enchant();
 var gameScreenSize = [515,515];
+var nopeSprite = Class.create(Sprite, {
+    initialize: function(){
+        var surface = new Surface(gameScreenSize[0], gameScreenSize[1]);
+        Sprite.call(this, gameScreenSize[0], gameScreenSize[1]);
+        
+        var context = surface.context;
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.fillStyle = 'rgba(0, 0, 0, 0)';
+        context.fillRect(0, 0, gameScreenSize[0], gameScreenSize[1]);
+        context.closePath();
+        this.image = surface;
+    }
+});
 
 var gameEndTimerSprite = Class.create(Sprite, {
     
@@ -56,8 +70,10 @@ var targetElipse = Class.create(Sprite, {
    }
 });
 
-function score(game) {
+function score(game, score) {
     var scene = new Scene();
+    return scene;
+    
 }
 
 function game(game) {
@@ -74,6 +90,7 @@ function game(game) {
     var scoreLabel = new Label();
     scoreLabel.text = score;
     
+    var nope = new nopeSprite();
     var target = new targetElipse(60, 60, 30, 30, 28, 10, 10, score, scoreLabel, '#7B0000');
     var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, '#FB0006');
     
@@ -101,6 +118,9 @@ function game(game) {
     extra.on('touchstart', function(){
         click(2);
     });
+    nope.on('touchstart', function(){
+    click(-2);
+    });
     
     document.addEventListener('mousemove', function(e){
         /*
@@ -122,6 +142,9 @@ function game(game) {
                 timeLeftSecond -= 1;
                 timeLeftLabel.text = timeLeftSecond;
             }
+            if(timeLeftSecond < 0){
+                game.replaceScene(scene(game, score));
+            }
         }
     });
     
@@ -132,6 +155,7 @@ function game(game) {
     scene.addChild(XLine);
     scene.addChild(YLine);
     scene.addChild(mouseElipse);
+    scene.addChild(nope);
     scene.addChild(target);
     scene.addChild(extra);
     scene.addChild(scoreLabel);
