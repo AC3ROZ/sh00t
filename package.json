@@ -1,0 +1,19 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "shoot",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AC3ROZ/sh00t.git"
+  },
+  "author": "himanoa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AC3ROZ/sh00t/issues"
+  },
+  "homepage": "https://github.com/AC3ROZ/sh00t#readme"
+}

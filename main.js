@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 enchant();
 var gameScreenSize = [515,515];
 
@@ -37,13 +37,13 @@ var mouseCursoleElipse = Class.create(Sprite, {
         var context = surface.context;
         context.beginPath();
         context.arc(30, 30, 28, 0, Math.PI*2, false);
-        context.strokeStyle = "black";
+        context.strokeStyle = 'black';
         context.lineWidth = 1;
         context.stroke();
         
         this.image = surface;
     }
-})
+});
 var targetElipse = Class.create(Sprite, {
    initialize: function(width, height, aw, ah, ar, x, y, score, scoreLabel, color){
        var surface = new Surface(width, height);
@@ -71,11 +71,12 @@ function score(game) {
 function game(game) {
     var scene = new Scene();
     var score = 0;
+    var isStart = false;
     var scoreLabel = new Label();
     scoreLabel.text = score;
     
-    var target = new targetElipse(60, 60, 30, 30, 28, 10, 10, score, scoreLabel, "#7B0000");
-    var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, "#FB0006");
+    var target = new targetElipse(60, 60, 30, 30, 28, 10, 10, score, scoreLabel, '#7B0000');
+    var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, '#FB0006');
     
     var mouseElipse = new mouseCursoleElipse();
     var XLine = new mouseCursoleLine(gameScreenSize[0], 1);
@@ -89,24 +90,29 @@ function game(game) {
 
         score = score + clickPoint;
         scoreLabel.text = score;
-    }
+    };
     
-    target.on("touchstart", function(){
+    target.on('touchstart', function(){
         click(1);
     });
-    extra.on("touchstart", function(){
+    extra.on('touchstart', function(){
         click(2);
     });
     
-    document.addEventListener("mousemove", function(e){
+    document.addEventListener('mousemove', function(e){
+        /*
+        windowオブジェクトで取れる座標とenchant.js内の座標に拡大率分の誤差があるのでgame.scaleで割った座標を実際の座標とする。
+        */
         var x_pos = e.pageX / game.scale;
         var y_pos = e.pageY / game.scale;
+        
         mouseElipse.x = x_pos - mouseElipse.width / 2;
         mouseElipse.y = y_pos - mouseElipse.height / 2;
         
         XLine.y = y_pos;
         YLine.x = x_pos;
     });
+    
     scoreLabel.x = 5;
     scoreLabel.y = 5;
     
@@ -122,15 +128,15 @@ function game(game) {
 function title(g){
     var scene = new Scene();
     
-    var title = new Label("Sh00t");
+    var title = new Label('Sh00t');
     title.x = (gameScreenSize[0] - title._boundWidth) / 2;
     title.y = (gameScreenSize[1] / 2) / 2;
     
-    var startButton = new Button("Start", "dark");
+    var startButton = new Button('Start', 'dark');
     startButton.moveTo(0,0);
     startButton.ontouchstart = function(){
         g.replaceScene(game(g));
-    }
+    };
     scene.addChild(title);
     scene.addChild(startButton);
     return scene;
@@ -143,4 +149,4 @@ window.onload = function(){
         game_.replaceScene(title(game_));
     };
     game_.start();
-}
+};
