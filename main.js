@@ -70,11 +70,25 @@ var targetElipse = Class.create(Sprite, {
    }
 });
 
-function score(game, score) {
+var score_scene = function(game, score) {
     var scene = new Scene();
-    return scene;
+    var scoreLabel = new Label();
+    scoreLabel.text = 'Score:' + score;
+    scoreLabel.x = 5;
+    scoreLabel.y = 5;
     
-}
+    var gotoTitleButton = new Button('GotoTitle', 'dark');
+    gotoTitleButton.x = 5;
+    gotoTitleButton.y = gameScreenSize[1] - 30;
+    
+    gotoTitleButton.on('touchstart', function(){
+       game.replaceScene(title(game)); 
+    });
+    
+    scene.addChild(scoreLabel);
+    scene.addChild(gotoTitleButton);
+    return scene;
+};
 
 function game(game) {
     var scene = new Scene();
@@ -119,7 +133,7 @@ function game(game) {
         click(2);
     });
     nope.on('touchstart', function(){
-    click(-2);
+        click(-2);
     });
     
     document.addEventListener('mousemove', function(e){
@@ -143,7 +157,7 @@ function game(game) {
                 timeLeftLabel.text = timeLeftSecond;
             }
             if(timeLeftSecond < 0){
-                game.replaceScene(scene(game, score));
+                game.replaceScene(score_scene(game, scoreLabel.text));
             }
         }
     });
