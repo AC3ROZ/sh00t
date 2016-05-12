@@ -17,7 +17,17 @@ var nopeSprite = Class.create(Sprite, {
 });
 
 var gameEndTimerSprite = Class.create(Sprite, {
-    
+    initialize: function(){
+        var surface = new Surface(10, 10);
+        Sprite.call(this, 10, 10);
+        
+        var context = surface.context;
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, 10, 10);
+        this.image = surface;
+    }
 });
 
 var mouseCursoleLine = Class.create(Sprite, {
@@ -94,6 +104,7 @@ function game(game) {
     var scene = new Scene();
     var score = 0;
     
+    scene.backgroundColor = '#C1BEFF';
     var timeLeftSecond = 30;
     var timeLeftLabel = new Label();
     timeLeftLabel.text = timeLeftSecond;
@@ -105,6 +116,10 @@ function game(game) {
     scoreLabel.text = score;
     
     var nope = new nopeSprite();
+    var endTimeSprite = new gameEndTimerSprite();
+    endTimeSprite.x = gameScreenSize[0] / 2;
+    endTimeSprite.y = gameScreenSize[1] / 2;
+    
     var target = new targetElipse(60, 60, 30, 30, 28, 10, 10, score, scoreLabel, '#7B0000');
     var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, '#FB0006');
     
@@ -116,6 +131,7 @@ function game(game) {
         if(!isStart){
             game.frame = 0;
             isStart = true;
+            endTimeSprite.tl.scaleBy(gameScreenSize[0], gameScreenSize[1], 300 * game.fps);
         }
         var x_pos = Math.floor(Math.random() * gameScreenSize[0] - 30);
         var y_pos = Math.floor(Math.random() * gameScreenSize[1] - 30);
@@ -164,15 +180,13 @@ function game(game) {
     
     scoreLabel.x = 5;
     scoreLabel.y = 5;
-    
-    scene.addChild(timeLeftLabel);
-    scene.addChild(XLine);
-    scene.addChild(YLine);
-    scene.addChild(mouseElipse);
-    scene.addChild(nope);
-    scene.addChild(target);
-    scene.addChild(extra);
-    scene.addChild(scoreLabel);
+    var childs = [endTimeSprite, timeLeftLabel,
+                  XLine, YLine, 
+                  mouseElipse, nope, target, 
+                  extra, scoreLabel];
+    for(var i = 0; i < childs.length; i++){
+        scene.addChild(childs[i]);
+    }
     return scene;
 }
 
