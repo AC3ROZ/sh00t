@@ -24,7 +24,7 @@ var gameEndTimerSprite = Class.create(Sprite, {
         var context = surface.context;
         context.beginPath();
         context.moveTo(0, 0);
-        context.fillStyle = 'white';
+        context.fillStyle = '#9390C3';
         context.fillRect(0, 0, 10, 10);
         this.image = surface;
     }
@@ -114,7 +114,6 @@ function game(game) {
     var isStart = false;
     var scoreLabel = new Label();
     scoreLabel.text = score;
-    
     var nope = new nopeSprite();
     var endTimeSprite = new gameEndTimerSprite();
     endTimeSprite.x = gameScreenSize[0] / 2;
@@ -153,9 +152,8 @@ function game(game) {
     });
     
     document.addEventListener('mousemove', function(e){
-        /*
-        windowオブジェクトで取れる座標とenchant.js内の座標に拡大率分の誤差があるのでgame.scaleで割った座標を実際の座標とする。
-        */
+        
+        /* windowオブジェクトで取れる座標とenchant.js内の座標に拡大率分の誤差があるのでgame.scaleで割った座標を実際の座標とする。 */
         var x_pos = e.pageX / game.scale;
         var y_pos = e.pageY / game.scale;
         
