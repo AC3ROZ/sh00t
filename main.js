@@ -180,7 +180,7 @@ function game(game) {
     scoreLabel.y = 5;
     var childs = [endTimeSprite, timeLeftLabel,
                   XLine, YLine, 
-                  mouseElipse, nope, target, 
+                  mouseElipse, nope,target, 
                   extra, scoreLabel];
     for(var i = 0; i < childs.length; i++){
         scene.addChild(childs[i]);
