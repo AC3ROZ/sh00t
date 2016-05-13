@@ -126,7 +126,7 @@ function game(game) {
     var XLine = new mouseCursoleLine(gameScreenSize[0], 1);
     var YLine = new mouseCursoleLine(1, gameScreenSize[1]);
     
-    var click = function(clickPoint){
+    var click = function(clickPoint, sound){
         if(!isStart){
             game.frame = 0;
             isStart = true;
@@ -152,7 +152,6 @@ function game(game) {
     });
     
     document.addEventListener('mousemove', function(e){
-        
         /* windowオブジェクトで取れる座標とenchant.js内の座標に拡大率分の誤差があるのでgame.scaleで割った座標を実際の座標とする。 */
         var x_pos = e.pageX / game.scale;
         var y_pos = e.pageY / game.scale;
@@ -208,6 +207,11 @@ function title(g){
 window.onload = function(){
     var game_ = new Core(gameScreenSize[0], gameScreenSize[1]);
     game_.fps = 60;
+    game_.preload(['./music/bgm.mp3', 
+                  './music/click.wav',
+                  './music/extra_click.wav',
+                  './music/nope_click.wav',
+                  './music/result.mp3']);
     game_.onload = function(){
         game_.replaceScene(title(game_));
     };
