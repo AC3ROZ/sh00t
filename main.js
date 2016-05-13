@@ -132,6 +132,7 @@ function game(game) {
             isStart = true;
             endTimeSprite.tl.scaleBy(gameScreenSize[0], gameScreenSize[1], 300 * game.fps);
         }
+        game.assets[sound].play();
         var x_pos = Math.floor(Math.random() * gameScreenSize[0] - 30);
         var y_pos = Math.floor(Math.random() * gameScreenSize[1] - 30);
         target.tl.moveTo(x_pos, y_pos, 10, enchant.Easing.QUAD_EASEINOUT);
@@ -142,13 +143,13 @@ function game(game) {
     };
     
     target.on('touchstart', function(){
-        click(1);
+        click(1, './music/click.wav');
     });
     extra.on('touchstart', function(){
-        click(2);
+        click(2, './music/extra_click.wav');
     });
     nope.on('touchstart', function(){
-        click(-2);
+        click(-2, './music/nope_click.wav');
     });
     
     document.addEventListener('mousemove', function(e){
