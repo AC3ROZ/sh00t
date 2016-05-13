@@ -83,6 +83,17 @@ var targetElipse = Class.create(Sprite, {
 var score_scene = function(game, score) {
     var scene = new Scene();
     var scoreLabel = new Label();
+    
+    var bgm = game.assets['./music/result.mp3'];
+    // if(bgm.src){
+    //     bgm.play();
+    //     bgm.src.loop = true;
+    // }
+    scene.on('enterframe', function(){
+        if(!bgm.src){
+            bgm.play();
+        }
+    });
     scoreLabel.text = 'Score:' + score;
     scoreLabel.x = 5;
     scoreLabel.y = 5;
@@ -92,7 +103,8 @@ var score_scene = function(game, score) {
     gotoTitleButton.y = gameScreenSize[1] - 30;
     
     gotoTitleButton.on('touchstart', function(){
-       game.replaceScene(title(game)); 
+        bgm.stop();
+        game.replaceScene(title(game)); 
     });
     
     scene.addChild(scoreLabel);
@@ -103,7 +115,7 @@ var score_scene = function(game, score) {
 function game(game) {
     var scene = new Scene();
     var score = 0;
-    
+    var bgm = game.assets['./music/bgm.mp3'];
     scene.backgroundColor = '#C1BEFF';
     var timeLeftSecond = 30;
     var timeLeftLabel = new Label();
@@ -119,7 +131,7 @@ function game(game) {
     endTimeSprite.x = gameScreenSize[0] / 2;
     endTimeSprite.y = gameScreenSize[1] / 2;
     
-    var target = new targetElipse(60, 60, 30, 30, 28, 10, 10, score, scoreLabel, '#7B0000');
+    var target = new targetElipse(60, 60, 30, 30, 30, 10, 10, score, scoreLabel, '#7B0000');
     var extra = new targetElipse(40, 40, 30, 30, 10, 10, 10, score, scoreLabel, '#FB0006');
     
     var mouseElipse = new mouseCursoleElipse();
@@ -130,9 +142,14 @@ function game(game) {
         if(!isStart){
             game.frame = 0;
             isStart = true;
+            // if(bgm.src.loop){
+            //     bgm.play();
+            //     bgm.src.loop = true;
+            // }
             endTimeSprite.tl.scaleBy(gameScreenSize[0], gameScreenSize[1], 300 * game.fps);
         }
-        game.assets[sound].play();
+        var se = game.assets[sound].clone();
+        se.play();
         var x_pos = Math.floor(Math.random() * gameScreenSize[0] - 30);
         var y_pos = Math.floor(Math.random() * gameScreenSize[1] - 30);
         target.tl.moveTo(x_pos, y_pos, 10, enchant.Easing.QUAD_EASEINOUT);
@@ -166,11 +183,15 @@ function game(game) {
     
     scene.on('enterframe', function(){
        if(isStart){
+            if(!bgm.src){
+                bgm.play();
+            }
             if(game.frame % game.fps == 0){
                 timeLeftSecond -= 1;
                 timeLeftLabel.text = timeLeftSecond;
             }
             if(timeLeftSecond < 0){
+                bgm.stop();
                 game.replaceScene(score_scene(game, scoreLabel.text));
             }
         }
